@@ -1,0 +1,33 @@
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: downloads 
+    annotations:
+      volume.beta.kubernetes.io/storage-class: "slow"
+    labels:
+      name: downloads
+  spec:
+    capacity:
+      storage: 5Gi
+    accessModes:
+      - ReadWriteMany
+    persistentVolumeReclaimPolicy: Recycle
+    nfs:
+      path: /hyper-tank/downloads 
+      server: 192.168.1.254 
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: downloads-claim 
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "slow"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      name: "downloads"

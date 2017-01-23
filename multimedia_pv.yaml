@@ -1,0 +1,33 @@
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: multimedia 
+    annotations:
+      volume.beta.kubernetes.io/storage-class: "slow"
+    labels:
+      name: multimedia
+  spec:
+    capacity:
+      storage: 5Gi
+    accessModes:
+      - ReadWriteOnce
+    persistentVolumeReclaimPolicy: Recycle
+    nfs:
+      path: /hyper-tank/multimedia
+      server: 192.168.1.254 
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: multimedia-claim
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "slow"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      name: "multimedia"

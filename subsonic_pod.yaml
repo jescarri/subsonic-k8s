@@ -1,0 +1,39 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: subsonic
+  labels:
+    name: subsonic 
+spec:
+  containers:
+    - name: subsonicapp 
+      image: stanvit/subsonic 
+      env:
+        - name: SUBSONIC_USERID
+          value: "1001"
+        - name: SUBSONIC_PORT
+          value: "8080"
+        - name: SUBSONIC_PLAYLIST_FOLDER
+          value: "/subsonic/home/playlists"
+        - name: SUBSONIC_MAX_MEMORY
+          value: "512"
+      ports:
+        - containerPort: 8080
+          name: "subsonic-server"
+      volumeMounts:
+      - mountPath: "/downloads"
+        name: downloads
+      - mountPath: "/multimedia"
+        name: multimedia
+      - mountPath: "/subsonic/home"
+        name: subsonicdata 
+  volumes:
+    - name: downloads
+      persistentVolumeClaim:
+        claimName: downloads-claim 
+    - name: multimedia 
+      persistentVolumeClaim:
+        claimName: multimedia-claim 
+    - name: subsonicdata 
+      persistentVolumeClaim:
+        claimName: subsonic-data-claim 
